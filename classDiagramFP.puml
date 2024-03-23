@@ -1,0 +1,41 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+abstract class Scraper{
++String listname
++float priceSold
++String date
++String hyperlink
++filter()
+}
+class Main {
++search()
++scraper()
+}
+
+class DataPriceScraper{
++float dataP []
++float parseArr []
++float pullPrice()
+
+}
+
+class AvgPriceScrapper{
++float parseArr[]
++getAvg()
+}
+
+class HTML {
+Search bar
+Displays sorted data
+New search button
+}
+
+Scraper --> DataPriceScraper
+DataPriceScraper --> AvgPriceScrapper
+
+DataPriceScraper --> Main
+AvgPriceScrapper --> Main
+Main --> HTML
+
+@enduml
