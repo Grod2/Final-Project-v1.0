@@ -40,7 +40,7 @@ alt success == true
 Filter -> Client: true
 Client -> SearchView: ShowList()
 else
-Filter -> Client: flase
+Filter -> Client: false
 Client -> SearchView: ShowList("This item has no information")
 
 
