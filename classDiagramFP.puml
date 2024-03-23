@@ -1,28 +1,49 @@
 @startuml
 'https://plantuml.com/class-diagram
 
-abstract class Scraper{
+class Scraper{
 +String listname
 +float priceSold
 +String date
 +String hyperlink
++float dataP []
++float parseArr []
 +filter()
++float pullPrice()
++getAvg()
++getCategory()
 }
+
 class Main {
 +search()
 +scraper()
 }
 
-class DataPriceScraper{
-+float dataP []
-+float parseArr []
-+float pullPrice()
 
+interface Item{
+String listname
+String itemType()
 }
 
-class AvgPriceScrapper{
-+float parseArr[]
-+getAvg()
+class consumerGoods {
+}
+
+class foodAndBev {
+}
+
+class industrialGoods {
+}
+
+class services {
+}
+
+class digitalProducts {
+}
+
+class educationalGoods {
+}
+
+class healthcareGoods {
 }
 
 class HTML {
@@ -31,11 +52,19 @@ Displays sorted data
 New search button
 }
 
-Scraper --> DataPriceScraper
-DataPriceScraper --> AvgPriceScrapper
+Main --o Scraper
+HTML --* Main
 
-DataPriceScraper --> Main
-AvgPriceScrapper --> Main
-Main --> HTML
+Item <|-- consumerGoods
+Item <|-- foodAndBev
+Item <|-- services
+Item <|-- industrialGoods
+Item <|-- educationalGoods
+Item <|-- healthcareGoods
+Item <|-- digitalProducts
+
+
+Scraper o-- Item
+Scraper --o HTML
 
 @enduml
