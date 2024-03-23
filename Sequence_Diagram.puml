@@ -1,0 +1,48 @@
+@startuml
+autonumber
+
+actor Customer as user
+participant SearchView
+participant Client
+participant PriceScrapper
+participant Calculation
+participant Filter
+participant SearchResult
+
+user -> SearchView: search item
+user -> SearchView: enters URL of item
+SearchView -> Client: search()
+
+Client -> SearchView: getSelectedItem()
+SearchView -> Client: scrapper()
+SearchView --> Client: HTML Item elements
+
+Client -> PriceScrapper: select.text()
+Client -> PriceScrapper: replace("$", " ").replace(","," ")
+PriceScrapper -> Client: getListingName()
+PriceScrapper -> Client: getPriceSold()
+PriceScrapper -> Client: getDate()
+PriceScrapper -> Client: getLink()
+Client --> PriceScrapper: Price 
+
+PriceScrapper -> Calculation: PriceCalc()
+Calculation -> PriceScrapper: getAvg()
+PriceScrapper --> Calculation: Average Price
+Calculation -> Client: pullPrice()
+
+
+
+Client --> Filter: Name, Date, Link, Avg Price
+Filter -> SearchResult: filter()
+SearchResult --> Filter: success
+
+alt success == true
+Filter -> Client: true
+Client -> SearchView: ShowList()
+else
+Filter -> Client: flase
+Client -> SearchView: ShowList("This item has no information")
+
+
+
+@enduml
