@@ -3,45 +3,34 @@ autonumber
 
 actor Customer as user
 participant SearchView
-participant Client
 participant PriceScrapper
-participant Calculation
 participant Filter
+participant Calculation
 participant SearchResult
 
-user -> SearchView: search item
 user -> SearchView: enters URL of item
-SearchView -> Client: search()
+SearchView -> PriceScrapper: search()
 
-Client -> SearchView: getSelectedItem()
-SearchView -> Client: scrapper()
-SearchView --> Client: HTML Item elements
+PriceScrapper -> SearchView: getSelectedItem()
+SearchView -> PriceScrapper: scrapper()
+SearchView --> PriceScrapper: HTML Item elements
 
-Client -> PriceScrapper: select.text()
-Client -> PriceScrapper: replace("$", " ").replace(","," ")
-PriceScrapper -> Client: getListingName()
-PriceScrapper -> Client: getPriceSold()
-PriceScrapper -> Client: getDate()
-PriceScrapper -> Client: getLink()
-Client --> PriceScrapper: Price 
+PriceScrapper -> Filter: filter()
+Filter -> PriceScrapper: getListingName()
+Filter -> PriceScrapper: getPriceSold()
+Filter -> PriceScrapper: getDate()
+Filter -> PriceScrapper: getLink()
+PriceScrapper --> SearchResult: Name, Date, Link 
 
-PriceScrapper -> Calculation: PriceCalc()
-Calculation -> PriceScrapper: getAvg()
-PriceScrapper --> Calculation: Average Price
-Calculation -> Client: pullPrice()
+Filter -> Calculation: PriceCalc()
+Calculation -> Filter: getAvg()
+Filter --> Calculation: Average Price
+Calculation -> Filter: pullPrice()
 
-
-
-Client --> Filter: Name, Date, Link, Avg Price
-Filter -> SearchResult: filter()
-SearchResult --> Filter: success
-
-alt success == true
-Filter -> Client: true
-Client -> SearchView: ShowList()
-else
-Filter -> Client: false
-Client -> SearchView: ShowList("This item has no information")
+Filter --> SearchResult: Average Price
+PriceScrapper -> SearchResult: ShowList()
+note left: Code will run but can fail if the elements are not from ebay. \nIn other words, it will fail if it cannot connect to website
+SearchResult --> SearchView: Price Estimate
 
 
 
